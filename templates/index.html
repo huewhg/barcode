@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventura</title>
+    
+  </head>
+  <body>
+    <form action="/add" method="post">
+        <label for="name">Název:</label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                style="margin-right: 3%"
+              />
+        <label for="code">Kód:</label>
+              <input
+                id="code"
+                type="text"
+                name="code"
+                style="margin-right: 3%"
+              />
+        <button type="submit" value="Submit">Zadat!</button>
+    </form>
+    <a href="/a4"><button>Tisk!</button></a>
+    <hr>
+    <ol>
+        {% for e in entries %}
+        <li><h2>{{e.name}}</h2>                                                                                
+        {{e.code_svg | safe}}
+        <h3>{{e.code}}</h3>
+            <form action="/remove" method="post">
+            
+              <input
+                id="id"
+                type="hidden"
+                name="id"
+                value="{{e.id}}"
+
+              />
+                <button type="submit" value="Submit">Odebrat!</button>
+                </form>
+        </li>   
+        <hr>
+        {% endfor %}
+        
+
+    </ol>
+  </body>
+</html>
