@@ -5,51 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inventurní štítky</title>
   <style>
-    /* Preserves the two-column/four-row A4 label positions in bark(1).docx. */
-    @page { size: A4 portrait; margin: 0; }
-    html, body { padding: 0; margin: 0; background: #fff; }
-    body { font-family: "Liberation Serif", "Times New Roman", Times, serif; }
+    /* A4 sheet: 3 columns x 7 rows of exactly 70 x 42.3 mm.
+       The rows occupy 296.1 mm, leaving 0.45 mm above and below. */
+    @page { size: 210mm 297mm; margin: 0; }
+
+    html, body {
+      padding: 0;
+      margin: 0;
+      background: #fff;
+    }
+    body {
+      font-family: "Liberation Serif", "Times New Roman", Times, serif;
+      color: #000;
+    }
 
     .sheet {
-      position: relative;
       box-sizing: border-box;
+      display: grid;
+      grid-template-columns: repeat(3, 70mm);
+      grid-template-rows: repeat(7, 42.3mm);
+      align-content: center;
       width: 210mm;
       height: 297mm;
       margin: 0 auto;
       overflow: hidden;
       background: white;
-      color: black;
       break-inside: avoid;
     }
+
     .label {
-      position: absolute;
+      position: relative;
       box-sizing: border-box;
-      width: 98.81mm;
-      height: 71.12mm;
-      left: 6.35mm;
-      top: 6.35mm;
-      font-size: 12pt;
+      width: 70mm;
+      height: 42.3mm;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      font-size: 9.5pt;
       font-weight: normal;
+      break-inside: avoid;
     }
-    .label:nth-child(even) { left: 105.16mm; }
-    .label:nth-child(n+3):nth-child(-n+4) { top: 77.47mm; }
-    .label:nth-child(n+5):nth-child(-n+6) { top: 148.59mm; }
-    .label:nth-child(n+7) { top: 219.71mm; }
 
     .description {
       position: absolute;
-      left: 0;
-      top: 0.25mm;
-      width: 98.81mm;
-      line-height: 13.8pt;
-      overflow-wrap: break-word;
+      left: 2.5mm;
+      top: 1.8mm;
+      width: 65mm;
+      height: 9.6mm;
+      line-height: 4.8mm;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+      overflow-wrap: anywhere;
     }
+
     .barcode {
       position: absolute;
-      left: 0;
-      top: var(--barcode-top);
-      width: 91.23mm;
-      height: 13.16mm;
+      left: 2.5mm;
+      top: 13mm;
+      width: 65mm;
+      height: 16.5mm;
       overflow: hidden;
     }
     .barcode svg {
@@ -59,27 +76,30 @@
       max-width: 100%;
       max-height: 100%;
     }
+
     .reference {
       position: absolute;
-      left: 0;
-      top: var(--reference-top);
-      font-size: 12pt;
-      line-height: 13.8pt;
+      left: 2.5mm;
+      top: 32.2mm;
+      width: 65mm;
+      font-size: 9.5pt;
+      line-height: 4.8mm;
       white-space: nowrap;
+      overflow: hidden;
     }
+
     @media print {
-      html, body { width: 210mm; margin: 0; background: white; }
+      html, body { width: 210mm; margin: 0; }
       .sheet { margin: 0; break-after: page; }
       .sheet:last-child { break-after: auto; }
     }
   </style>
 </head>
 <body>
-{% set barcode_y = [13.511, 14.182, 19.138, 19.456, 19.138, 18.803, 18.803, 18.468] %}
-{% for page_entries in entries | batch(8) %}
+{% for page_entries in entries | batch(21) %}
 <main class="sheet">
   {% for e in page_entries %}
-  <section class="label" style="--barcode-top: {{ barcode_y[loop.index0] }}mm; --reference-top: {{ 29.4 if loop.index0 < 2 else 34.24 }}mm;">
+  <section class="label">
     <div class="description">{{ e.name | e }}</div>
     <div class="barcode">{{ e.code_svg | safe }}</div>
     <div class="reference">{{ e.code | e }}</div>
