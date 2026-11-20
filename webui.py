@@ -72,8 +72,9 @@ def index():
 def add():
     start:int = time.time_ns()
     if len(entries) > 0:
+        print(flask.request.form["name"])
         e: entry = entry(
-                entries[-1].id + 1, flask.request.form["name"], flask.request.form["code"], ""
+                entries[-1].id + 1, flask.request.form["name"].replace("\n", "</br>"), flask.request.form["code"], ""
             )
     else:
         e: entry = entry(
@@ -108,11 +109,19 @@ def remove():
             if parsed and parsed.id != id:
                 dbfile.write(line)
     return flask.redirect("/")
-@app.route("/a4", methods=["GET"])
-def a4():
+@app.route("/a4_small", methods=["GET"])
+def a4_small():
     context = {
             "entries":entries
         }
-    return flask.render_template("a4.html",  **context)
+    return flask.render_template("a4_small.html",  **context)
+@app.route("/a4_big", methods=["GET"])
+def a4_big():
+    context = {"entries": entries}
+    return flask.render_template("a4_big.html", **context)
+@app.route("/a4_med", methods=["GET"])
+def a4_med():
+    context = {"entries": entries}
+    return flask.render_template("a4_med.html", **context)
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5001, debug=True)

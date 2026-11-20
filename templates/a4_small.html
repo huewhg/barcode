@@ -100,7 +100,7 @@
 <main class="sheet">
   {% for e in page_entries %}
   <section class="label">
-    <div class="description">{{ e.name | e }}</div>
+    <div class="description">{{ e.name | safe}}</div>
     <div class="barcode">{{ e.code_svg | safe }}</div>
     <div class="reference">{{ e.code | e }}</div>
   </section>

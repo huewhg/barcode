@@ -9,12 +9,13 @@
   <body>
     <form action="/add" method="post">
         <label for="name">Název:</label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                style="margin-right: 3%"
-              />
+              <textarea
+  id="name"
+  name="name"
+  rows="2"
+  cols="40"
+  style="margin-right: 3%; vertical-align: middle;"
+></textarea>
         <label for="code">Kód:</label>
               <input
                 id="code"
@@ -24,11 +25,13 @@
               />
         <button type="submit" value="Submit">Zadat!</button>
     </form>
-    <a href="/a4"><button>Tisk!</button></a>
+    <a href="/a4_small"><button>Tisk na malé štítky (3x7 štítků na stránku)</button></a>
+    <a href="/a4_med"><button>Tisk na středně velké štítky (2x8 štítků na stránku)</button></a>
+    <a href="/a4_big"><button>Tisk na velké štítky (2x4 štítků na stránku)</button></a>
     <hr>
     <ol>
         {% for e in entries %}
-        <li><h2>{{e.name}}</h2>                                                                                
+        <li><h2>{{e.name | safe}}</h2>                                                                                
         {{e.code_svg | safe}}
         <h3>{{e.code}}</h3>
             <form action="/remove" method="post">
